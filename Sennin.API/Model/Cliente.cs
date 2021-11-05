@@ -7,10 +7,12 @@ using System.Threading.Tasks;
 
 namespace Sennin.API.Model
 {
-    [Table("paises")]
-    public class Pais : AuditEntity<int>
+    [Table("clientes")]
+    public class Cliente : EmpresaEntity<int>
     {
         public string Nome { get; set; }
-
+        public int BairroId { get; set; }
+        public int EnderecoId { get; set; }
+        public string EnderecoNumero { get; set; }
     }
 }

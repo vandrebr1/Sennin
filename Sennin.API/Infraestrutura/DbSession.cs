@@ -1,9 +1,5 @@
-﻿using Npgsql;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Sennin.API.Infraestrutura
 {
@@ -14,10 +10,11 @@ namespace Sennin.API.Infraestrutura
         public IDbConnection Connection { get; }
         public IDbTransaction Transaction { get; set; }
 
-        public DbSession()
+        public DbSession(DatabaseOptions dbOptions)
         {
             _id = Guid.NewGuid();
-            Connection = new NpgsqlConnection(Settings.ConnectionString);
+            var dbContext = new DbContext().SetDbProvider(dbOptions.ProviderName);
+            Connection = dbContext.GetDbContext(dbOptions.ConnectionString);
             Connection.Open();
         }
 

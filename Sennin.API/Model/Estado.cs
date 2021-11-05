@@ -1,15 +1,14 @@
-﻿namespace Sennin.API.Model
+﻿using Sennin.API.Model.Base;
+
+namespace Sennin.API.Model
 {
-    public class Estado
+    public class Estado : AuditEntity<int>
     {
-        public int Id { get; set; }
         public string Nome { get; set; }
 
         public string Sigla { get; set; }
 
-        public int Pais_id { get; set; }
-
-        public virtual Pais Pais { get; set; }
+        public int PaisId { get; set; }
 
     }
 }

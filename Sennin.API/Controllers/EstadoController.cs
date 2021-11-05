@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Sennin.API.Infraestrutura.Interfaces;
-using Sennin.API.Infraestrutura.Repository;
+using Sennin.API.Interfaces;
 using Sennin.API.Model;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Sennin.API.Controllers
 {
@@ -11,27 +12,87 @@ namespace Sennin.API.Controllers
     [Route("v1/[Controller]")]
     public class EstadoController : ControllerBase
     {
-        private IUnitOfWork _unitOfWork;
-        private IRepository<Estado> _repository;
+        private readonly IUnitOfWork unitOfWork;
+        private readonly IRepository<Estado> repository;
         public EstadoController([FromServices] IUnitOfWork unitOfWork, [FromServices] IRepository<Estado> repository)
         {
-            _unitOfWork = unitOfWork;
-            _repository = repository;
+            this.unitOfWork = unitOfWork;
+            this.repository = repository;
+        }
+
+        [HttpGet("{Id:int}")]
+        public async Task<ActionResult<Estado>> Get(int Id)
+        {
+            var model = await repository.SelectAsync(Id);
+
+            if (model != null)
+            {
+                return Ok(model);
+            }
+
+            return NotFound();
         }
 
         [HttpGet("")]
-        public IEnumerable<Estado> Get()
+        public async Task<ActionResult<IEnumerable<Estado>>> Get()
         {
-            return _repository.Get();
+            var list = await repository.SelectAsync();
+            return Ok(list);
+
         }
 
         [HttpPost("")]
-        public IActionResult Post([FromBody] Estado model)
+        [SwaggerResponse(201, "Registro criado com sucesso")]
+        [SwaggerResponse(400, "Campos inválidas")]
+        public async Task<IActionResult> Post([FromBody] Estado model)
         {
-            _unitOfWork.BeginTransaction();
-            _repository.Save(model);
-            _unitOfWork.Commit();
-            return Ok();
+            model.PreenchePropriedadesNovoRegistro();
+
+            unitOfWork.BeginTransaction();
+            await repository.SaveAsync(model);
+            unitOfWork.Commit();
+
+            return CreatedAtAction(nameof(Post), new { model.Id }, model);
+
         }
+
+        [HttpPut("")]
+        [SwaggerResponse(201, "Registro atualizado com sucesso")]
+        [SwaggerResponse(400, "Campos inválidas")]
+        public async Task<IActionResult> Put([FromBody] Estado model)
+        {
+            var modelExistente = await repository.SelectAsync(model.Id);
+
+            if (modelExistente == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                model.PreenchePropriedadesAtualizaRegistro();
+                unitOfWork.BeginTransaction();
+                await repository.SaveAsync(model);
+                unitOfWork.Commit();
+                return NoContent();
+            }
+
+        }
+
+        [HttpDelete("{Id:int}")]
+        public async Task<IActionResult> Delete(int Id)
+        {
+            var modelExistente = await repository.SelectAsync(Id);
+
+            if (modelExistente == null)
+            {
+                return NotFound();
+            }
+
+            unitOfWork.BeginTransaction();
+            await repository.DeleteAsync(Id);
+            unitOfWork.Commit();
+            return NoContent();
+        }
+
     }
 }

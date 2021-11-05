@@ -1,20 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Sennin.API.Infraestrutura;
-using Sennin.API.Infraestrutura.Interfaces;
-using Sennin.API.Infraestrutura.Repository;
+using Sennin.API.Interfaces;
 using Sennin.API.Model;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Sennin.API.Repository;
 
 namespace Sennin.API
 {
@@ -30,17 +23,28 @@ namespace Sennin.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            var databaseOptions = new DatabaseOptions();
+            Configuration.Bind(nameof(DatabaseOptions), databaseOptions);
+            services.AddSingleton(databaseOptions);
 
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Sennin.API", Version = "v1" });
+                c.EnableAnnotations();
             });
 
             services.AddScoped<DbSession>();
+
             services.AddTransient<IUnitOfWork, UnitOfWork>();
             services.AddTransient<IRepository<Pais>, PaisRepository>();
             services.AddTransient<IRepository<Estado>, EstadoRepository>();
+            services.AddTransient<IRepository<Cidade>, CidadeRepository>();
+            services.AddTransient<IRepository<Bairro>, BairroRepository>();
+            services.AddTransient<IRepository<Endereco>, EnderecoRepository>();
+            services.AddTransient<IRepository<Cliente>, ClienteRepository>();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -10,18 +10,18 @@ namespace Sennin.API.Controllers
 
     [ApiController]
     [Route("v1/[Controller]")]
-    public class PaisController : ControllerBase
+    public class ClienteController : ControllerBase
     {
         private readonly IUnitOfWork unitOfWork;
-        private readonly IRepository<Pais> repository;
-        public PaisController([FromServices] IUnitOfWork unitOfWork, [FromServices] IRepository<Pais> repository)
+        private readonly IRepository<Cliente> repository;
+        public ClienteController([FromServices] IUnitOfWork unitOfWork, [FromServices] IRepository<Cliente> repository)
         {
             this.unitOfWork = unitOfWork;
             this.repository = repository;
         }
 
         [HttpGet("{Id:int}")]
-        public async Task<ActionResult<Pais>> Get(int Id)
+        public async Task<ActionResult<Cliente>> Get(int Id)
         {
             var model = await repository.SelectAsync(Id);
 
@@ -34,7 +34,7 @@ namespace Sennin.API.Controllers
         }
 
         [HttpGet("")]
-        public async Task<ActionResult<IEnumerable<Pais>>> Get()
+        public async Task<ActionResult<IEnumerable<Cliente>>> Get()
         {
             var list = await repository.SelectAsync();
             return Ok(list);
@@ -44,21 +44,21 @@ namespace Sennin.API.Controllers
         [HttpPost("")]
         [SwaggerResponse(201, "Registro criado com sucesso")]
         [SwaggerResponse(400, "Campos inválidas")]
-        public async Task<IActionResult> Post([FromBody] Pais model)
+        public async Task<IActionResult> Post([FromBody] Cliente model)
         {
             model.PreenchePropriedadesNovoRegistro();
-
             unitOfWork.BeginTransaction();
             await repository.SaveAsync(model);
             unitOfWork.Commit();
 
             return CreatedAtAction(nameof(Post), new { model.Id }, model);
+
         }
 
         [HttpPut("")]
         [SwaggerResponse(201, "Registro atualizado com sucesso")]
         [SwaggerResponse(400, "Campos inválidas")]
-        public async Task<IActionResult> Put([FromBody] Pais model)
+        public async Task<IActionResult> Put([FromBody] Cliente model)
         {
             var modelExistente = await repository.SelectAsync(model.Id);
 
@@ -74,6 +74,7 @@ namespace Sennin.API.Controllers
                 unitOfWork.Commit();
                 return NoContent();
             }
+
         }
 
         [HttpDelete("{Id:int}")]
