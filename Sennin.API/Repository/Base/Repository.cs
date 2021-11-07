@@ -1,6 +1,8 @@
 ﻿using Dapper.Contrib.Extensions;
 using Sennin.API.Infraestrutura;
 using Sennin.API.Interfaces;
+using Sennin.API.Model.Base;
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -27,12 +29,14 @@ namespace Sennin.API.Repository
 
         public async Task<int> SaveAsync(T entity)
         {
+
             return await session.Connection.InsertAsync(entity);
         }
 
         public async Task<T> SelectAsync(int Id)
         {
-            return await session.Connection.GetAsync<T>(Id);
+            
+            return await session.Connection.GetAsync<T>(Id).;
         }
 
         public async Task<IEnumerable<T>> SelectAsync()

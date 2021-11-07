@@ -1,12 +1,11 @@
 ﻿using Sennin.API.Infraestrutura;
 using Sennin.API.Model;
 using Sennin.API.Repository.Base;
-
 namespace Sennin.API.Repository
 {
-    public class BairroRepository : Repository<Bairro>
+    public class UsuarioRepository : Repository<Usuario>
     {
-        public BairroRepository(DbSession session) : base(session) { }
+        public UsuarioRepository(DbSession session) : base(session) { }
 
     }
 }

@@ -43,6 +43,8 @@ namespace Sennin.API
             services.AddTransient<IRepository<Bairro>, BairroRepository>();
             services.AddTransient<IRepository<Endereco>, EnderecoRepository>();
             services.AddTransient<IRepository<Cliente>, ClienteRepository>();
+            services.AddTransient<IRepository<Usuario>, UsuarioRepository>();
+            services.AddTransient<IRepository<Empresa>, EmpresaRepository>();
 
 
         }

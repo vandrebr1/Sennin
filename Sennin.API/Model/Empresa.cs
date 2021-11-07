@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Sennin.API.Model
 {
-    [Table("paises")]
-    public class Pais : EntityBase<int>
+    [Table("empresas")]
+    public class Empresa : EntityBase<int>
     {
         public string Nome { get; set; }
 

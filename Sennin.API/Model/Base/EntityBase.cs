@@ -2,59 +2,37 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Runtime.Serialization;
 
 namespace Sennin.API.Model.Base
 {
     public interface IEntityBase<TKey>
     {
         TKey Id { get; set; }
-    }
-
-    public interface IDeleteEntity
-    {
         bool IsDeleted { get; set; }
-    }
-
-    public interface IDeleteEntity<TKey> : IDeleteEntity, IEntityBase<TKey>
-    {
-    }
-
-    public interface IAuditEntity
-    {
         DateTime CreatedDate { get; set; }
         string CreatedBy { get; set; }
         DateTime UpdatedDate { get; set; }
         string UpdatedBy { get; set; }
-    }
-    public interface IAuditEntity<TKey> : IAuditEntity, IDeleteEntity<TKey>
-    {
     }
 
     public interface IEmpresaEntity
     {
         int EmpresaId { get; }
     }
-    public interface IEmpresaEntity<TKey> : IEmpresaEntity, IAuditEntity<TKey>
+    public interface IEmpresaEntity<TKey> : IEmpresaEntity, IEntityBase<TKey>
     {
-    }
 
+    }
     public abstract class EntityBase<TKey> : IEntityBase<TKey>
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [SwaggerSchema(ReadOnly = true)]
         public virtual TKey Id { get; set; }
-    }
 
-    public abstract class DeleteEntity<TKey> : EntityBase<TKey>, IDeleteEntity<TKey>
-    {
         [SwaggerSchema(ReadOnly = true)]
         public bool IsDeleted { get; set; }
-    }
 
-    public abstract class AuditEntity<TKey> : DeleteEntity<TKey>, IAuditEntity<TKey>
-    {
         [SwaggerSchema(ReadOnly = true)]
         public DateTime CreatedDate { get; set; }
 
@@ -92,17 +70,12 @@ namespace Sennin.API.Model.Base
         {
             SetUpdate();
         }
-
     }
 
-    public abstract class EmpresaEntity<TKey> : AuditEntity<TKey>, IEmpresaEntity<TKey>
+    public abstract class EmpresaEntity<TKey> : EntityBase<TKey>, IEmpresaEntity<TKey>
     {
         [SwaggerSchema(ReadOnly = true)]
-        public int EmpresaId { get => EmpresaLogada(); }
+        public int EmpresaId { get; }
 
-        private int EmpresaLogada()
-        {
-            return 1;
-        }
     }
 }

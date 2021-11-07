@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Sennin.API.Model
 {
     [Table("cidades")]
-    public class Cidade : AuditEntity<int>
+    public class Cidade : EntityBase<int>
     {
         public string Nome { get; set; }
 

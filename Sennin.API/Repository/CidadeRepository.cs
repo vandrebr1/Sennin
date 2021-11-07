@@ -1,5 +1,7 @@
 ﻿using Sennin.API.Infraestrutura;
 using Sennin.API.Model;
+using Sennin.API.Repository.Base;
+using System.Threading.Tasks;
 
 namespace Sennin.API.Repository
 {
@@ -7,5 +9,5 @@ namespace Sennin.API.Repository
     {
         public CidadeRepository(DbSession session) : base(session) { }
 
-    }
+    }   
 }

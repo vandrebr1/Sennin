@@ -2,7 +2,7 @@
 
 namespace Sennin.API.Model
 {
-    public class Estado : AuditEntity<int>
+    public class Estado : EntityBase<int>
     {
         public string Nome { get; set; }
 
