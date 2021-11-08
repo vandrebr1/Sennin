@@ -11,10 +11,10 @@ namespace Sennin.API.Interfaces
 
         Task<IEnumerable<T>> SelectAsync();
 
-        Task<int> SaveAsync(T entity);
+        Task<int?> SaveAsync(T entity);
 
-        Task<bool> UpdateAsync(T entity);
+        Task<int> UpdateAsync(T entity);
 
-        Task<bool> DeleteAsync(int Id);
+        Task<int> DeleteAsync(int Id);
     }
 }

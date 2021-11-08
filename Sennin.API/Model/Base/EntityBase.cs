@@ -17,7 +17,7 @@ namespace Sennin.API.Model.Base
 
     public interface IEmpresaEntity
     {
-        int EmpresaId { get; }
+        int EmpresaId { get; set; }
     }
     public interface IEmpresaEntity<TKey> : IEmpresaEntity, IEntityBase<TKey>
     {
@@ -75,7 +75,6 @@ namespace Sennin.API.Model.Base
     public abstract class EmpresaEntity<TKey> : EntityBase<TKey>, IEmpresaEntity<TKey>
     {
         [SwaggerSchema(ReadOnly = true)]
-        public int EmpresaId { get; }
-
+        public int EmpresaId { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Dapper.Contrib.Extensions;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 using Sennin.API.Model.Base;
 using System;
 using System.Collections.Generic;
