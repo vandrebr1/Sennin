@@ -45,6 +45,7 @@ namespace Sennin.API
             services.AddTransient<IRepository<Cliente>, ClienteRepository>();
             services.AddTransient<IRepository<Usuario>, UsuarioRepository>();
             services.AddTransient<IRepository<Empresa>, EmpresaRepository>();
+            services.AddTransient<IRepository<Produto>, ProdutosRepository>();
 
 
         }
@@ -59,7 +60,7 @@ namespace Sennin.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Sennin.API v1"));
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
 
             app.UseRouting();
 

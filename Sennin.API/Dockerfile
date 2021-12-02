@@ -3,14 +3,14 @@
 FROM mcr.microsoft.com/dotnet/aspnet:5.0 AS base
 WORKDIR /app
 EXPOSE 80
-EXPOSE 443
+
+ENV ASPNETCORE_URLS=http://+:80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["Sennin.API/Sennin.API.csproj", "Sennin.API/"]
-RUN dotnet restore "Sennin.API/Sennin.API.csproj"
+COPY ["Sennin.API.csproj", "./"]
+RUN dotnet restore "Sennin.API.csproj"
 COPY . .
-WORKDIR "/src/Sennin.API"
 RUN dotnet build "Sennin.API.csproj" -c Release -o /app/build
 
 FROM build AS publish
